@@ -1,0 +1,6 @@
+services:
+  lichess_stats:
+    container_name: lichess_stats
+    image: 'tomcat:11.0'
+    ports:
+      - "8081:8080"

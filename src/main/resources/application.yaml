@@ -1,0 +1,6 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://snuffleupagus.db.elephantsql.com:5432/sejhfrus
+        username: sejhfrus
+        password: tK-S3zbTefc1JF9dRFuRPzFUUJel_jse
+        driver-class-name: org.postgresql.Driver
