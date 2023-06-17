@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "ms-azuretools.vscode-docker",
+        "redhat.fabric8-analytics",
+        "redhat.java",
+        "redhat.vscode-yaml",
+        "vscjava.vscode-java-debug",
+        "vscjava.vscode-maven",
+        "xaver.clang-format",
+    ]
+}
