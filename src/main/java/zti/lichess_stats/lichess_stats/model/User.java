@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,25 +15,18 @@ public class User {
     // Default constructor (required for some frameworks)
     public User() { }
 
-    public User(Long id, int age) {
+    public User(Long id, int age)
+    {
         this.id = id;
         this.age = age;
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
-    public int getAge() {
-        return age;
-    }
+    public int getAge() { return age; }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    public void setAge(int age) { this.age = age; }
 }
