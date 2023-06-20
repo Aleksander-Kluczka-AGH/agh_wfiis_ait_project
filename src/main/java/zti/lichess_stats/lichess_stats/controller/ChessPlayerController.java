@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import chariot.Client;
 
-import java.util.List;
-
 import zti.lichess_stats.lichess_stats.model.Player;
 import zti.lichess_stats.lichess_stats.service.PlayerService;
 
@@ -52,14 +50,6 @@ public class ChessPlayerController
 
         System.out.println("Returning from Lichess API...");
         return player;
-    }
-
-    // TODO: remove this, because it's probably unnecessary
-    @GetMapping("/")
-    public List<Player> getAllPlayers()
-    {
-        System.out.println("GET:: /CHESS/PLAYER/");
-        return playerService.getAllPlayers();
     }
 
     @PostMapping("/")
