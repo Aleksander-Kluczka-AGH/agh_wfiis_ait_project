@@ -36,6 +36,7 @@ public class ChessGameResultController
         List<GameResult> resultsFromDb = gameResultService.getGameResultsByPlayerId(username);
         if(!resultsFromDb.isEmpty())
         {
+            // TODO: check if last cache date is older than 1 day
             System.out.println("Returning from SQL database...");
             return resultsFromDb;
         }

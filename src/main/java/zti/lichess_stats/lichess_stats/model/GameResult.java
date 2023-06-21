@@ -10,7 +10,10 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "game_result")
@@ -28,7 +31,8 @@ public class GameResult
     private Player player;
     @ManyToOne
     @JoinColumn(name = "format")
-    @JsonBackReference
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
     private GameFormat format;
 
     public GameResult(Long id,
