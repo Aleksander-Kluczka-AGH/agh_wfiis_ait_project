@@ -35,11 +35,21 @@ CREATE TABLE "stats" (
 );
 
 CREATE TABLE "game_result" (
+	"id" SERIAL UNIQUE PRIMARY KEY,
 	"format" TEXT NOT NULL,
 	"player_id" TEXT NOT NULL,
 	"date" TIMESTAMP NOT NULL,
 	"points" INT NOT NULL,
-	"id" SERIAL UNIQUE PRIMARY KEY
+);
+
+CREATE TABLE "metadata" (
+	"id" SERIAL NOT NULL UNIQUE PRIMARY KEY,
+	"player_id" TEXT NOT NULL FOREIGN KEY REFERENCES "player"("id"),
+	"player_cache_datetime" TIMESTAMP NOT NULL DEFAULT NOW(),
+	"stats_cache_datetime" TIMESTAMP NOT NULL DEFAULT NOW(),
+	"game_results_cache_datetime" TIMESTAMP NOT NULL DEFAULT NOW(),
+	"are_stats_populated" BOOLEAN NOT NULL DEFAULT False,
+	"are_game_results_populated" BOOLEAN NOT NULL DEFAULT False
 );
 
 ALTER TABLE "stats" ADD CONSTRAINT "stats_fk0" FOREIGN KEY ("id") REFERENCES "player"("id");
@@ -47,3 +57,5 @@ ALTER TABLE "stats" ADD CONSTRAINT "stats_fk0" FOREIGN KEY ("id") REFERENCES "pl
 ALTER TABLE "game_result" ADD CONSTRAINT "game_result_fk0" FOREIGN KEY ("format") REFERENCES "game_format"("name");
 
 ALTER TABLE "game_result" ADD CONSTRAINT "game_result_fk1" FOREIGN KEY ("player_id") REFERENCES "player"("id");
+
+ALTER TABLE "metadata" ADD CONSTRAINT "metadata_fk0" FOREIGN KEY ("player_id") REFERENCES "player"("id");
