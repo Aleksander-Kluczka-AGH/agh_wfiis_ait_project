@@ -33,11 +33,6 @@ public class GameResultService
 
     public void createGameResultNative(Long points, LocalDate date, String playerId, String format)
     {
-        try
-        {
-            gameResultRepository.saveNative(points, date, playerId, format);
-        }
-        catch(Exception e)
-        { }
+        gameResultRepository.saveNative(points, date, playerId, format);
     }
 }

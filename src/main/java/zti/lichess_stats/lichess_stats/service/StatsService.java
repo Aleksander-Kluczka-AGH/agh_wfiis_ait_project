@@ -78,7 +78,7 @@ public class StatsService
         }
         catch(Exception e)
         {
-            System.out.println("Unkown error while saving stats to the database: " + e);
+            System.out.println("UNKNOWN ERROR: " + e);
         }
         return this.getStatsByPlayerId(id);
     }

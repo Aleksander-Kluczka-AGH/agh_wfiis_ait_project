@@ -23,9 +23,10 @@ public class PlayerService
         return optionalUser.orElse(null);
     }
 
-    public Player createPlayer(Player player)
+    public Player createPlayer(Player player) { return playerRepository.save(player); }
+
+    public boolean doesPlayerExist(String playerId)
     {
-        playerRepository.save(player);
-        return player;
+        return playerRepository.existsById(playerId);
     }
 }

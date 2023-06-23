@@ -10,10 +10,13 @@ import chariot.Client;
 import chariot.model.Many;
 import chariot.model.RatingHistory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import zti.lichess_stats.lichess_stats.model.GameResult;
+import zti.lichess_stats.lichess_stats.model.Player;
 import zti.lichess_stats.lichess_stats.service.GameResultService;
+import zti.lichess_stats.lichess_stats.service.PlayerService;
 
 @RestController
 @RequestMapping("/chess/game")
@@ -21,11 +24,14 @@ public class ChessGameResultController
 {
     Client lichessClient = Client.basic();
     private final GameResultService gameResultService;
+    private final PlayerService playerService;
 
     @Autowired
-    public ChessGameResultController(GameResultService gameResultService)
+    public ChessGameResultController(GameResultService gameResultService,
+        PlayerService playerService)
     {
         this.gameResultService = gameResultService;
+        this.playerService = playerService;
     }
 
     @GetMapping("/{username}")
@@ -39,6 +45,28 @@ public class ChessGameResultController
             // TODO: check if last cache date is older than 1 day
             System.out.println("Returning from SQL database...");
             return resultsFromDb;
+        }
+
+        if(!playerService.doesPlayerExist(username))
+        {
+            System.out.println("Inserting player '" + username + "' into database...");
+            var lichessUser = lichessClient.users().byId(username).get();
+            if(lichessUser != null)
+            {
+                System.out.println("Retrieved player from Lichess API: " + lichessUser.name());
+                Player player = new Player(lichessUser.id(),
+                    lichessUser.name(),
+                    lichessUser.url().toString(),
+                    lichessUser.createdAt(),
+                    lichessUser.seenAt(),
+                    lichessUser.playTimeTotal().toString());
+                playerService.createPlayer(player);
+            }
+            else
+            {
+                System.out.println("Lichess player '" + username + "' does not exist.");
+                return new ArrayList<GameResult>();
+            }
         }
 
         Many<RatingHistory> ratingHistories = lichessClient.users().ratingHistoryById(username);
@@ -69,7 +97,7 @@ public class ChessGameResultController
                 System.out.println("date = " + gameResult.date().toString());
                 gameResultService.createGameResultNative(gameResult.points().longValue(),
                     gameResult.date(),
-                    username,
+                    username.toLowerCase(),
                     formatName);
             }
         }

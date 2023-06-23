@@ -10,7 +10,9 @@ import chariot.Client;
 import chariot.model.StatsPerf.StatsPerfGame;
 import chariot.model.StatsPerfType;
 
+import zti.lichess_stats.lichess_stats.model.Player;
 import zti.lichess_stats.lichess_stats.model.Stats;
+import zti.lichess_stats.lichess_stats.service.PlayerService;
 import zti.lichess_stats.lichess_stats.service.StatsService;
 
 @RestController
@@ -19,11 +21,13 @@ public class StatsController
 {
     Client lichessClient = Client.basic();
     private final StatsService statsService;
+    private final PlayerService playerService;
 
     @Autowired
-    public StatsController(StatsService statsService)
+    public StatsController(StatsService statsService, PlayerService playerService)
     {
         this.statsService = statsService;
+        this.playerService = playerService;
     }
 
     @GetMapping("/{username}")
@@ -37,6 +41,28 @@ public class StatsController
             // TODO: check if last cache date is older than 1 day
             System.out.println("Returning from SQL database...");
             return resultsFromDb;
+        }
+
+        if(!playerService.doesPlayerExist(username))
+        {
+            System.out.println("Inserting player '" + username + "' into database...");
+            var lichessUser = lichessClient.users().byId(username).get();
+            if(lichessUser != null)
+            {
+                System.out.println("Retrieved player from Lichess API: " + lichessUser.name());
+                Player player = new Player(lichessUser.id(),
+                    lichessUser.name(),
+                    lichessUser.url().toString(),
+                    lichessUser.createdAt(),
+                    lichessUser.seenAt(),
+                    lichessUser.playTimeTotal().toString());
+                playerService.createPlayer(player);
+            }
+            else
+            {
+                System.out.println("Lichess player '" + username + "' does not exist.");
+                return null;
+            }
         }
 
         var lichessStats1 = lichessClient.users().byId(username).get().accountStats();
@@ -64,7 +90,7 @@ public class StatsController
             correspondenceStats != null ? Long.valueOf(correspondenceStats.rating()) : 0L;
 
         System.out.println("Returning from Lichess API...");
-        Stats newStats = statsService.createStatsNative(username,
+        Stats newStats = statsService.createStatsNative(username.toLowerCase(),
             Long.valueOf(lichessStats1.all()),
             Long.valueOf(lichessStats1.rated()),
             Long.valueOf(lichessStats1.ai()),

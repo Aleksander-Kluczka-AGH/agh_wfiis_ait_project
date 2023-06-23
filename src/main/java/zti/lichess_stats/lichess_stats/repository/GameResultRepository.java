@@ -11,14 +11,17 @@ import java.util.List;
 
 import zti.lichess_stats.lichess_stats.model.GameResult;
 
+import org.hibernate.exception.ConstraintViolationException;
+
 @Repository
 public interface GameResultRepository extends JpaRepository<GameResult, Long> {
     List<GameResult> findAllByPlayerId(String playerId);
 
-    @Transactional  // if it fails here, it's because of non-jakarta Transactional import version
+    @Transactional
     @Modifying
     @Query(
         value = "INSERT INTO game_result (points, date, player_id, format) VALUES (?1, ?2, ?3, ?4)",
         nativeQuery = true)
-    void saveNative(Long points, LocalDate date, String playerId, String format) throws Exception;
+    void saveNative(Long points, LocalDate date, String playerId, String format)
+        throws ConstraintViolationException;
 }

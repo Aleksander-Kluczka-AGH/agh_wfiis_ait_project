@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 import zti.lichess_stats.lichess_stats.model.Player;
 
 @Repository
-public interface PlayerRepository extends JpaRepository<Player, String> { }
+public interface PlayerRepository extends JpaRepository<Player, String> {
+    boolean existsById(String id);
+}

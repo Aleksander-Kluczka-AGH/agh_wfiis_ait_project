@@ -4,3 +4,8 @@ spring:
         username: sejhfrus
         password: tK-S3zbTefc1JF9dRFuRPzFUUJel_jse
         driver-class-name: org.postgresql.Driver
+logging:
+    level:
+        org.springframework.web: INFO
+        org.hibernate: ERROR
+        net.guides: DEBUG
