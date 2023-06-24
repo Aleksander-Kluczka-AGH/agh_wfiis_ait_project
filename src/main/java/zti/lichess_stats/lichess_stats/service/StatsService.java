@@ -16,6 +16,9 @@ public class StatsService
     @Autowired
     private StatsRepository statsRepository;
 
+    @Autowired
+    private MetadataService metadataService;
+
     public Stats getStatsByPlayerId(String playerId)
     {
         Optional<Stats> optionalStats = statsRepository.findById(playerId);
@@ -24,8 +27,10 @@ public class StatsService
 
     public Stats createStats(Stats stats)
     {
-        statsRepository.save(stats);
-        return stats;
+        var savedStats = statsRepository.save(stats);
+        metadataService.setStatsPopulated(stats.getPlayer().getId());
+        metadataService.refreshStatsCacheDatetime(stats.getPlayer().getId());
+        return savedStats;
     }
 
     public Stats createStatsNative(String id,
@@ -71,6 +76,8 @@ public class StatsService
                 classical_rating,
                 correspondence_count,
                 correspondence_rating);
+            metadataService.setStatsPopulated(id);
+            metadataService.refreshStatsCacheDatetime(id);
         }
         catch(ConstraintViolationException e)
         {

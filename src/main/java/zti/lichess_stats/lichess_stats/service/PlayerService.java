@@ -15,6 +15,9 @@ public class PlayerService
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private MetadataService metadataService;
+
     public List<Player> getAllPlayers() { return playerRepository.findAll(); }
 
     public Player getPlayerById(String playerId)
@@ -23,7 +26,12 @@ public class PlayerService
         return optionalUser.orElse(null);
     }
 
-    public Player createPlayer(Player player) { return playerRepository.save(player); }
+    public Player createPlayer(Player player)
+    {
+        var newPlayer = playerRepository.save(player);
+        metadataService.createMetadataNative(newPlayer.getId());
+        return newPlayer;
+    }
 
     public boolean doesPlayerExist(String playerId)
     {
