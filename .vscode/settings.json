@@ -3,8 +3,26 @@
     "java.configuration.updateBuildConfiguration": "interactive",
     "java.format.enabled": true,
     "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "eslint.lintTask.enable": true,
+    "eslint.run": "onSave",
     "[java]": {
         "editor.suggest.snippetsPreventQuickSuggestions": false,
         "editor.defaultFormatter": "xaver.clang-format"
-    }
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }

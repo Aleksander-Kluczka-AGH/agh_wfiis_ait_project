@@ -1,5 +1,6 @@
 {
     "recommendations": [
+        // backend
         "ms-azuretools.vscode-docker",
         "redhat.fabric8-analytics",
         "redhat.java",
@@ -7,5 +8,11 @@
         "vscjava.vscode-java-debug",
         "vscjava.vscode-maven",
         "xaver.clang-format",
+        // frontend
+        "Vue.volar",
+        "bierner.markdown-preview-github-styles",
+        "ecmel.vscode-html-css",
+        "esbenp.prettier-vscode",
+        "yzhang.markdown-all-in-one",
     ]
 }

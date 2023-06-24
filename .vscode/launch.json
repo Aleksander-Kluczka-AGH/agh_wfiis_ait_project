@@ -6,7 +6,7 @@
     "configurations": [
         {
             "type": "java",
-            "name": "LichessStatsApplication",
+            "name": "Launch Backend (debug)",
             "request": "launch",
             "mainClass": "zti.lichess_stats.LichessStatsApplication",
             "projectName": "lichess_stats",
