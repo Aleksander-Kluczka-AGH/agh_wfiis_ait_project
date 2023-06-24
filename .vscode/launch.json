@@ -11,6 +11,30 @@
             "mainClass": "zti.lichess_stats.LichessStatsApplication",
             "projectName": "lichess_stats",
             "cwd": "${workspaceFolder}/backend"
+        },
+        {
+            "type": "node",
+            "name": "Launch Frontend (debug)",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "cwd": "${workspaceFolder}/frontend",
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Launch Application (debug)",
+            "configurations": [
+                "Launch Backend (debug)",
+                "Launch Frontend (debug)",
+            ],
+            "stopAll": true
         }
     ]
 }
