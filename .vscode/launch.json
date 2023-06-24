@@ -8,7 +8,7 @@
             "type": "java",
             "name": "LichessStatsApplication",
             "request": "launch",
-            "mainClass": "zti.lichess_stats.lichess_stats.LichessStatsApplication",
+            "mainClass": "zti.lichess_stats.LichessStatsApplication",
             "projectName": "lichess_stats"
         }
     ]
