@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+    backend:
+        container_name: lichess_stats_backend
+        build:
+            context: ./backend/
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+    # TODO: backend should use 'expose' instead of 'ports' to make itself accessible to frontend
+    frontend:
+        container_name: lichess_stats_frontend
+        depends_on:
+            - backend
+        build:
+            context: ./frontend/
+            dockerfile: Dockerfile
+        ports:
+            - "5173:80"
