@@ -9,7 +9,8 @@
             "name": "LichessStatsApplication",
             "request": "launch",
             "mainClass": "zti.lichess_stats.LichessStatsApplication",
-            "projectName": "lichess_stats"
+            "projectName": "lichess_stats",
+            "cwd": "${workspaceFolder}/backend"
         }
     ]
 }
