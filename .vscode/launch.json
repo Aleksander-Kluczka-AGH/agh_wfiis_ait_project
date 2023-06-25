@@ -10,7 +10,12 @@
             "request": "launch",
             "mainClass": "zti.lichess_stats.LichessStatsApplication",
             "projectName": "lichess_stats",
-            "cwd": "${workspaceFolder}/backend"
+            "cwd": "${workspaceFolder}/backend",
+            "presentation": {
+                "group": "debug",
+                "order": 1,
+            },
+            "console": "internalConsole",
         },
         {
             "type": "node",
@@ -25,6 +30,11 @@
                 "<node_internals>/**"
             ],
             "cwd": "${workspaceFolder}/frontend",
+            "presentation": {
+                "group": "debug",
+                "order": 2,
+            },
+            "console": "internalConsole",
         },
     ],
     "compounds": [
