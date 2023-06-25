@@ -1,6 +1,7 @@
 package zti.lichess_stats.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import chariot.Client;
 import zti.lichess_stats.model.Player;
 import zti.lichess_stats.service.PlayerService;
 
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3_600)
 @RestController
 @RequestMapping("/chess/player")
 public class ChessPlayerController
