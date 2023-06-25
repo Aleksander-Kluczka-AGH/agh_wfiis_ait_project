@@ -1,0 +1,46 @@
+@import "./color_theme.css";
+
+:root {
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+}
+
+body {
+    display: flex;
+    place-items: center;
+
+    width: 100%;
+    margin: 0px;
+
+    color: var(--color-text);
+    background: var(--color-background);
+    transition: color var(--transition-time), background-color var(--transition-time);
+    line-height: 1.6;
+    font-family: Roboto, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen, Ubuntu,
+        Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    width: 70%;
+    max-width: 960px;
+
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-a);
+    transition: var(--transition-time);
+}
+
+@media (hover: hover) {
+    a:hover {
+        color: var(--color-a-hover);
+    }
+}

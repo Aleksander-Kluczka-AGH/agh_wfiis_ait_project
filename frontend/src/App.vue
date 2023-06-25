@@ -1,30 +1,48 @@
 <script setup>
-    import HelloWorld from "./components/HelloWorld.vue";
+    import HeaderBar from "./components/HeaderBar.vue";
+    import BaseButton from "./components/BaseButton.vue";
+    import { LichessUserStore } from "./stores/LichessUserStore.js";
+
+    const lichessUserStore = LichessUserStore();
 </script>
 
 <template>
-    <div>
-        <a href="https://vitejs.dev" target="_blank">
-            <img src="/vite.svg" class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://vuejs.org/" target="_blank">
-            <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-        </a>
-    </div>
-    <HelloWorld msg="Vite + Vue" />
+    <header>
+        <HeaderBar />
+    </header>
+
+    <main>
+        <BaseButton>Button</BaseButton>
+        {{ lichessUserStore.data.basic.name }}
+    </main>
 </template>
 
 <style scoped>
-    .logo {
-        height: 6em;
-        padding: 1.5em;
-        will-change: filter;
-        transition: filter 300ms;
+    header {
+        display: flex;
+        flex-direction: column;
+        place-items: center;
+
+        padding: 1rem;
+        margin-bottom: 2rem;
+
+        border-style: solid;
+        border-radius: 6px;
+        border-width: 1px;
+        border-color: var(--color-border);
     }
-    .logo:hover {
-        filter: drop-shadow(0 0 2em #646cffaa);
-    }
-    .logo.vue:hover {
-        filter: drop-shadow(0 0 2em #42b883aa);
+
+    main {
+        display: flex;
+        flex-direction: column;
+        place-items: center;
+
+        padding: 1rem;
+        margin-top: 2rem;
+
+        border-style: solid;
+        border-radius: 6px;
+        border-width: 1px;
+        border-color: var(--color-border);
     }
 </style>
