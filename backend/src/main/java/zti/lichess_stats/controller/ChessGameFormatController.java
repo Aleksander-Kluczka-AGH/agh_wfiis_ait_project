@@ -2,6 +2,7 @@ package zti.lichess_stats.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import zti.lichess_stats.model.GameFormat;
 import zti.lichess_stats.service.GameFormatService;
 
+@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3_600)
 @RestController
 @RequestMapping("/chess/format")
 public class ChessGameFormatController
