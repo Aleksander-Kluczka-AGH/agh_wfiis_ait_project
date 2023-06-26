@@ -1,9 +1,8 @@
 <script setup>
     import HeaderBar from "./components/HeaderBar.vue";
-    import BaseButton from "./components/BaseButton.vue";
-    import { LichessUserStore } from "./stores/LichessUserStore.js";
-
-    const lichessUserStore = LichessUserStore();
+    import BasicInfo from "./components/BasicInfo.vue";
+    import StatsSummary from "./components/StatsSummary.vue";
+    import StatsPerFormat from "./components/StatsPerFormat.vue";
 </script>
 
 <template>
@@ -12,8 +11,9 @@
     </header>
 
     <main>
-        <BaseButton>Button</BaseButton>
-        {{ lichessUserStore.data.basic.name }}
+        <BasicInfo />
+        <StatsSummary />
+        <StatsPerFormat />
     </main>
 </template>
 
