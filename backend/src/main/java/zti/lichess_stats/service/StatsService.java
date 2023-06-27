@@ -16,21 +16,23 @@ public class StatsService
     @Autowired
     private StatsRepository statsRepository;
 
-    @Autowired
-    private MetadataService metadataService;
-
     public Stats getStatsByPlayerId(String playerId)
     {
-        Optional<Stats> optionalStats = statsRepository.findById(playerId);
+        System.out.println("getStatsByPlayerId");
+        Optional<Stats> optionalStats = statsRepository.findByPlayerId(playerId.toLowerCase());
         return optionalStats.orElse(null);
+    }
+
+    public boolean doesStatsExistForPlayerId(String playerId)
+    {
+        System.out.println("doesStatsExistForPlayerId");
+        return statsRepository.existsByPlayerId(playerId.toLowerCase());
     }
 
     public Stats createStats(Stats stats)
     {
-        var savedStats = statsRepository.save(stats);
-        metadataService.setStatsPopulated(stats.getPlayer().getId());
-        metadataService.refreshStatsCacheDatetime(stats.getPlayer().getId());
-        return savedStats;
+        System.out.println("createStats");
+        return statsRepository.save(stats);
     }
 
     public Stats createStatsNative(String id,
@@ -54,6 +56,7 @@ public class StatsService
         Long correspondence_count,
         Long correspondence_rating)
     {
+        System.out.println("createStatsNative");
         try
         {
             statsRepository.saveNative(id,
@@ -76,8 +79,6 @@ public class StatsService
                 classical_rating,
                 correspondence_count,
                 correspondence_rating);
-            metadataService.setStatsPopulated(id);
-            metadataService.refreshStatsCacheDatetime(id);
         }
         catch(ConstraintViolationException e)
         {

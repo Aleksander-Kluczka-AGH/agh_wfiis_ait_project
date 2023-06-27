@@ -36,36 +36,25 @@ public class StatsController
     public Stats getStatsByPlayerId(@PathVariable String username)
     {
         System.out.println("/CHESS/STATS/" + username.toUpperCase());
-
-        Stats resultsFromDb = statsService.getStatsByPlayerId(username);
-        if(resultsFromDb != null)
+        if(!playerService.ensurePlayerExists(username))
         {
+            return null;
+        }
+
+        // Stats resultsFromDb = statsService.getStatsByPlayerId(username);
+        // if(resultsFromDb != null)
+        // {
+        //     System.out.println("Returning from SQL database...");
+        //     return resultsFromDb;
+        // }
+
+        if(statsService.doesStatsExistForPlayerId(username))
+        {
+            return statsService.getStatsByPlayerId(
+                username);  // TODO: return response here instead of raw data
             // TODO: check if last cache date is older than 1 day
-            System.out.println("Returning from SQL database...");
-            return resultsFromDb;
         }
 
-        if(!playerService.doesPlayerExist(username))
-        {
-            System.out.println("Inserting player '" + username + "' into database...");
-            var lichessUser = lichessClient.users().byId(username).get();
-            if(lichessUser != null)
-            {
-                System.out.println("Retrieved player from Lichess API: " + lichessUser.name());
-                Player player = new Player(lichessUser.id(),
-                    lichessUser.name(),
-                    lichessUser.url().toString(),
-                    lichessUser.createdAt(),
-                    lichessUser.seenAt(),
-                    lichessUser.playTimeTotal().toString());
-                playerService.createPlayer(player);
-            }
-            else
-            {
-                System.out.println("Lichess player '" + username + "' does not exist.");
-                return null;
-            }
-        }
 
         var lichessStats1 = lichessClient.users().byId(username).get().accountStats();
         var lichessStats2 = lichessClient.users().byId(username).get().ratings();

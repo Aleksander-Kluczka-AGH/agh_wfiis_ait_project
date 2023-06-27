@@ -10,10 +10,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Stats
 {
     @Id
-    private String id;
-    @MapsId
+    private Long id;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "player_id")
     @JsonBackReference
     private Player player;
     @Column
