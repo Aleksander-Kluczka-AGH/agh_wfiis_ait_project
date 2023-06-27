@@ -32,32 +32,21 @@ public class ChessPlayerController
     public Player getPlayerById(@PathVariable String playerId)
     {
         System.out.println("/CHESS/PLAYER/" + playerId.toUpperCase());
-
-        Player playerFromDb = playerService.getPlayerById(playerId);
-        if(playerFromDb != null)
+        if(!playerService.ensurePlayerExists(playerId))
         {
-            System.out.println("Returning from SQL database...");
-
-            return playerFromDb;
+            return null;  // TODO: return response here instead of raw data
         }
 
-        var lichessUser = lichessClient.users().byId(playerId).get();
-        Player player = new Player(lichessUser.id(),
-            lichessUser.name(),
-            lichessUser.url().toString(),
-            lichessUser.createdAt(),
-            lichessUser.seenAt(),
-            lichessUser.playTimeTotal().toString());
-        playerService.createPlayer(player);
-
-        System.out.println("Returning from Lichess API...");
-        return player;
+        // TODO: check if last cache date is older than 1 day
+        return playerService.getPlayerById(
+            playerId);  // TODO: return response here instead of raw data
     }
 
     @PostMapping("/")
     public Player createPlayer(@RequestBody Player player)
     {
         System.out.println("POST:: /CHESS/PLAYER/");
-        return playerService.createPlayer(player);
+        return playerService.createPlayer(
+            player);  // TODO: return response here instead of raw data
     }
 }

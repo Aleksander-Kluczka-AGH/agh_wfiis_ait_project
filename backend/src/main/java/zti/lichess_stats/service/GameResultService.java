@@ -16,10 +16,7 @@ public class GameResultService
     @Autowired
     private GameResultRepository gameResultRepository;
 
-    @Autowired
-    private MetadataService metadataService;
-
-    public List<GameResult> getAllGameFormats() { return gameResultRepository.findAll(); }
+    public List<GameResult> getAllGameResults() { return gameResultRepository.findAll(); }
 
     public GameResult getGameResultById(Long id)
     {
@@ -32,17 +29,13 @@ public class GameResultService
         return gameResultRepository.findAllByPlayerId(playerId);
     }
 
-    public void createGameResult(GameResult gameResult)
+    public GameResult createGameResult(GameResult gameResult)
     {
-        gameResultRepository.save(gameResult);
-        metadataService.setGameResultsPopulated(gameResult.getPlayer().getId());
-        metadataService.refreshGameResultsCacheDatetime(gameResult.getPlayer().getId());
+        return gameResultRepository.save(gameResult);
     }
 
     public void createGameResultNative(Long points, LocalDate date, String playerId, String format)
     {
         gameResultRepository.saveNative(points, date, playerId, format);
-        metadataService.setGameResultsPopulated(playerId);
-        metadataService.refreshGameResultsCacheDatetime(playerId);
     }
 }

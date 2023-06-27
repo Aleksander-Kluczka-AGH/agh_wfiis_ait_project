@@ -9,6 +9,9 @@ import java.util.Optional;
 import zti.lichess_stats.model.GameFormat;
 import zti.lichess_stats.repository.GameFormatRepository;
 
+// This service is kept for eventual future extension, i.e. support of automatic addition of new
+// game formats. As of right now, it is not used.
+
 @Service
 public class GameFormatService
 {

@@ -11,7 +11,6 @@ import chariot.Client;
 import chariot.model.Many;
 import chariot.model.RatingHistory;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,36 +45,20 @@ public class ChessGameResultController
     {
         System.out.println("/CHESS/GAME/" + username.toUpperCase());
 
-        // if(metadataService.refreshGameResultsCacheDatetime(username, LocalDate.now())) { }
+        if(!playerService.ensurePlayerExists(username))
+        {
+            return new ArrayList<GameResult>();  // TODO: return response here instead of raw data
+        }
+
+        // if(metadataService.areStatsOutdated()) { }
+        // TODO: check if last cache date is older than 1 day
+
 
         List<GameResult> resultsFromDb = gameResultService.getGameResultsByPlayerId(username);
         if(!resultsFromDb.isEmpty())
         {
             System.out.println("Returning from SQL database...");
-            return resultsFromDb;
-        }
-
-        // TODO: make this part a function in PlayerService, reuse in StatsController
-        if(!playerService.doesPlayerExist(username))
-        {
-            System.out.println("Inserting player '" + username + "' into database...");
-            var lichessUser = lichessClient.users().byId(username).get();
-            if(lichessUser != null)
-            {
-                System.out.println("Retrieved player from Lichess API: " + lichessUser.name());
-                Player player = new Player(lichessUser.id(),
-                    lichessUser.name(),
-                    lichessUser.url().toString(),
-                    lichessUser.createdAt(),
-                    lichessUser.seenAt(),
-                    lichessUser.playTimeTotal().toString());
-                playerService.createPlayer(player);
-            }
-            else
-            {
-                System.out.println("Lichess player '" + username + "' does not exist.");
-                return new ArrayList<GameResult>();
-            }
+            return resultsFromDb;  // TODO: return response here instead of raw data
         }
 
         Many<RatingHistory> ratingHistories = lichessClient.users().ratingHistoryById(username);
@@ -112,6 +95,7 @@ public class ChessGameResultController
         }
 
         System.out.println("Returning from Lichess API...");
-        return gameResultService.getGameResultsByPlayerId(username);
+        return gameResultService.getGameResultsByPlayerId(
+            username);  // TODO: return response here instead of raw data
     }
 }
