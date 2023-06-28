@@ -17,9 +17,18 @@ public class MetadataService
         return metadataRepository.findByPlayerId(playerId);
     }
 
-    // TODO: make function checking below functions
-    // ( use `SELECT *function()*;` )
-    // check_player_cache_outdated(text)
-    // check_stats_cache_outdated(text)
-    // check_game_results_cache_outdated(text)
+    public boolean isPlayerOutdated(String playerId)
+    {
+        return metadataRepository.checkPlayerCacheOutdated(playerId);
+    }
+
+    public boolean areStatsOutdated(String playerId)
+    {
+        return metadataRepository.checkStatsCacheOutdated(playerId);
+    }
+
+    public boolean areGameResultsOutdated(String playerId)
+    {
+        return metadataRepository.checkGameResultsCacheOutdated(playerId);
+    }
 }

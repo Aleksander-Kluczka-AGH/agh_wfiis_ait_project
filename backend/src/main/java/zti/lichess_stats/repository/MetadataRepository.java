@@ -17,51 +17,14 @@ public interface MetadataRepository extends JpaRepository<Metadata, Long> {
     @Query(value = "INSERT INTO metadata (player_id) VALUES (?1)", nativeQuery = true)
     void saveNative(String playerId) throws ConstraintViolationException;
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE metadata SET player_cache_datetime = NOW() WHERE player_id = ?1",
-        nativeQuery = true)
-    void refreshPlayerCacheDatetime(String playerId);
+    @Query(value = "SELECT check_player_cache_outdated(?1)", nativeQuery = true)
+    boolean checkPlayerCacheOutdated(String playerId);
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE metadata SET stats_cache_datetime = NOW() WHERE player_id = ?1",
-        nativeQuery = true)
-    void refreshStatsCacheDatetime(String playerId);
+    @Query(value = "SELECT check_stats_cache_outdated(?1)", nativeQuery = true)
+    boolean checkStatsCacheOutdated(String playerId);
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE metadata SET game_results_cache_datetime = NOW() WHERE player_id = ?1",
-        nativeQuery = true)
-    void refreshGameResultsCacheDatetime(String playerId);
-
-    @Transactional
-    @Modifying
-    @Query(
-        value =
-            "UPDATE metadata SET player_cache_datetime = NOW(), stats_cache_datetime = NOW(), game_results_cache_datetime = NOW() WHERE player_id = ?1",
-        nativeQuery = true)
-    void refreshAllCacheDatetimes(String playerId);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE metadata SET are_stats_populated = True WHERE player_id = ?1",
-        nativeQuery = true)
-    void setStatsPopulated(String playerId);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE metadata SET are_game_results_populated = True WHERE player_id = ?1",
-        nativeQuery = true)
-    void setGameResultsPopulated(String playerId);
-
-    @Transactional
-    @Modifying
-    @Query(
-        value =
-            "UPDATE metadata SET are_stats_populated = True, are_game_results_populated = True WHERE player_id = ?1",
-        nativeQuery = true)
-    void setAllPopulated(String playerId);
+    @Query(value = "SELECT check_game_results_cache_outdated(?1)", nativeQuery = true)
+    boolean checkGameResultsCacheOutdated(String playerId);
 
     Metadata findByPlayerId(String playerId);
 }

@@ -13,6 +13,7 @@ import chariot.model.StatsPerfType;
 
 import zti.lichess_stats.model.Player;
 import zti.lichess_stats.model.Stats;
+import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
 import zti.lichess_stats.service.StatsService;
 
@@ -24,12 +25,16 @@ public class StatsController
     Client lichessClient = Client.basic();
     private final StatsService statsService;
     private final PlayerService playerService;
+    private final MetadataService metadataService;
 
     @Autowired
-    public StatsController(StatsService statsService, PlayerService playerService)
+    public StatsController(StatsService statsService,
+        PlayerService playerService,
+        MetadataService metadataService)
     {
         this.statsService = statsService;
         this.playerService = playerService;
+        this.metadataService = metadataService;
     }
 
     @GetMapping("/{username}")
@@ -38,23 +43,23 @@ public class StatsController
         System.out.println("/CHESS/STATS/" + username.toUpperCase());
         if(!playerService.ensurePlayerExists(username))
         {
-            return null;
+            return null;  // TODO: return response here instead of raw data
         }
-
-        // Stats resultsFromDb = statsService.getStatsByPlayerId(username);
-        // if(resultsFromDb != null)
-        // {
-        //     System.out.println("Returning from SQL database...");
-        //     return resultsFromDb;
-        // }
 
         if(statsService.doesStatsExistForPlayerId(username))
         {
-            return statsService.getStatsByPlayerId(
-                username);  // TODO: return response here instead of raw data
-            // TODO: check if last cache date is older than 1 day
+            if(!metadataService.areStatsOutdated(username))
+            {
+                System.out.println("Returning from SQL database...");
+                return statsService.getStatsByPlayerId(
+                    username);  // TODO: return response here instead of raw data
+            }
+            else
+            {
+                System.out.println("Stats cache is too old, deleting existing entry...");
+                statsService.deleteStatsByPlayerId(username);
+            }
         }
-
 
         var lichessStats1 = lichessClient.users().byId(username).get().accountStats();
         var lichessStats2 = lichessClient.users().byId(username).get().ratings();
@@ -81,7 +86,7 @@ public class StatsController
             correspondenceStats != null ? Long.valueOf(correspondenceStats.rating()) : 0L;
 
         System.out.println("Returning from Lichess API...");
-        Stats newStats = statsService.createStatsNative(username.toLowerCase(),
+        Stats newStats = statsService.createStatsNative(username,
             Long.valueOf(lichessStats1.all()),
             Long.valueOf(lichessStats1.rated()),
             Long.valueOf(lichessStats1.ai()),
@@ -102,6 +107,6 @@ public class StatsController
             Long.valueOf(correspondenceGames),
             Long.valueOf(correspondenceRating));
 
-        return newStats;
+        return newStats;  // TODO: return response here instead of raw data
     }
 }

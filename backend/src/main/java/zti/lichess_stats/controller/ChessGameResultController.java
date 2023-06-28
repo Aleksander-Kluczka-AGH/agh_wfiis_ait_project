@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zti.lichess_stats.model.GameResult;
-import zti.lichess_stats.model.Player;
 import zti.lichess_stats.service.GameResultService;
 import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;

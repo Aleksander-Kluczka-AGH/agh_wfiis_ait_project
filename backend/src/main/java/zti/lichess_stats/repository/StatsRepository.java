@@ -14,11 +14,16 @@ import zti.lichess_stats.model.Stats;
 public interface StatsRepository extends JpaRepository<Stats, String> {
     @Transactional
     @Modifying
+    @Query(value = "DELETE FROM stats WHERE player_id = ?1", nativeQuery = true)
+    void deleteByPlayerId(String player_id);
+
+    @Transactional
+    @Modifying
     @Query(
         value =
             "INSERT INTO stats (player_id, \"all\", rated, ai, drawn, lost, won, imported, puzzle_count, puzzle_rating, rapid_count, rapid_rating, blitz_count, blitz_rating, bullet_count, bullet_rating, classical_count, classical_rating, correspondence_count, correspondence_rating) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20)",
         nativeQuery = true)
-    void saveNative(String id,  // foreign key with player id value
+    void saveNative(String player_id,
         Long all,
         Long rated,
         Long ai,

@@ -18,22 +18,21 @@ public class StatsService
 
     public Stats getStatsByPlayerId(String playerId)
     {
-        System.out.println("getStatsByPlayerId");
         Optional<Stats> optionalStats = statsRepository.findByPlayerId(playerId.toLowerCase());
         return optionalStats.orElse(null);
     }
 
     public boolean doesStatsExistForPlayerId(String playerId)
     {
-        System.out.println("doesStatsExistForPlayerId");
         return statsRepository.existsByPlayerId(playerId.toLowerCase());
     }
 
-    public Stats createStats(Stats stats)
+    public void deleteStatsByPlayerId(String playerId)
     {
-        System.out.println("createStats");
-        return statsRepository.save(stats);
+        statsRepository.deleteByPlayerId(playerId.toLowerCase());
     }
+
+    public Stats createStats(Stats stats) { return statsRepository.save(stats); }
 
     public Stats createStatsNative(String id,
         Long all,
@@ -56,10 +55,9 @@ public class StatsService
         Long correspondence_count,
         Long correspondence_rating)
     {
-        System.out.println("createStatsNative");
         try
         {
-            statsRepository.saveNative(id,
+            statsRepository.saveNative(id.toLowerCase(),
                 all,
                 rated,
                 ai,
