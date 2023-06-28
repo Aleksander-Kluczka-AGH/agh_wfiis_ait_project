@@ -1,6 +1,8 @@
 package zti.lichess_stats.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +19,8 @@ import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
 import zti.lichess_stats.service.StatsService;
 
-@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3_600)
+@CrossOrigin(origins = {"http://localhost:5173/", "https://vis4rd.github.io/ait_project_2023/"},
+    maxAge = 3_600)
 @RestController
 @RequestMapping("/chess/stats")
 public class StatsController
@@ -38,12 +41,13 @@ public class StatsController
     }
 
     @GetMapping("/{username}")
-    public Stats getStatsByPlayerId(@PathVariable String username)
+    public ResponseEntity<?> getStatsByPlayerId(@PathVariable String username)
     {
         System.out.println("/CHESS/STATS/" + username.toUpperCase());
         if(!playerService.ensurePlayerExists(username))
         {
-            return null;  // TODO: return response here instead of raw data
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Player '" + username + "' does not exist");
         }
 
         if(statsService.doesStatsExistForPlayerId(username))
@@ -51,8 +55,8 @@ public class StatsController
             if(!metadataService.areStatsOutdated(username))
             {
                 System.out.println("Returning from SQL database...");
-                return statsService.getStatsByPlayerId(
-                    username);  // TODO: return response here instead of raw data
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(statsService.getStatsByPlayerId(username));
             }
             else
             {
@@ -107,6 +111,6 @@ public class StatsController
             Long.valueOf(correspondenceGames),
             Long.valueOf(correspondenceRating));
 
-        return newStats;  // TODO: return response here instead of raw data
+        return ResponseEntity.status(HttpStatus.OK).body(newStats);
     }
 }

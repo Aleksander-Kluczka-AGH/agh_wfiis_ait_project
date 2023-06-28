@@ -1,6 +1,8 @@
 package zti.lichess_stats.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +21,8 @@ import zti.lichess_stats.service.GameResultService;
 import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
 
-@CrossOrigin(origins = "http://localhost:5173/", maxAge = 3_600)
+@CrossOrigin(origins = {"http://localhost:5173/", "https://vis4rd.github.io/ait_project_2023/"},
+    maxAge = 3_600)
 @RestController
 @RequestMapping("/chess/game")
 public class ChessGameResultController
@@ -40,13 +43,14 @@ public class ChessGameResultController
     }
 
     @GetMapping("/{username}")
-    public List<GameResult> getGameResultsByPlayerId(@PathVariable String username)
+    public ResponseEntity<?> getGameResultsByPlayerId(@PathVariable String username)
     {
         System.out.println("/CHESS/GAME/" + username.toUpperCase());
 
         if(!playerService.ensurePlayerExists(username))
         {
-            return new ArrayList<GameResult>();  // TODO: return response here instead of raw data
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Player '" + username + "' does not exist");
         }
 
         // if(metadataService.areStatsOutdated()) { }
@@ -57,7 +61,7 @@ public class ChessGameResultController
         if(!resultsFromDb.isEmpty())
         {
             System.out.println("Returning from SQL database...");
-            return resultsFromDb;  // TODO: return response here instead of raw data
+            return ResponseEntity.status(HttpStatus.OK).body(resultsFromDb);
         }
 
         Many<RatingHistory> ratingHistories = lichessClient.users().ratingHistoryById(username);
@@ -94,7 +98,7 @@ public class ChessGameResultController
         }
 
         System.out.println("Returning from Lichess API...");
-        return gameResultService.getGameResultsByPlayerId(
-            username);  // TODO: return response here instead of raw data
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(gameResultService.getGameResultsByPlayerId(username));
     }
 }
