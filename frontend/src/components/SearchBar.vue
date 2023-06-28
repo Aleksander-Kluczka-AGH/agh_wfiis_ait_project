@@ -14,7 +14,6 @@
         inputContent.value = event.target.value;
     }
     function setName() {
-        lichessUserStore.data.basic.name = inputContent.value;
         lichessUserStore.func.requestUserInfo(inputContent.value);
     }
 </script>

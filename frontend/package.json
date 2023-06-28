@@ -3,10 +3,13 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
+    "homepage": "https://vis4rd.github.io/ait_project_2023/",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
     },
     "dependencies": {
         "pinia": "^2.1.4",
@@ -17,6 +20,7 @@
         "@vue/eslint-config-prettier": "^7.1.0",
         "eslint": "^8.43.0",
         "eslint-plugin-vue": "^9.15.1",
+        "gh-pages": "^5.0.0",
         "prettier": "^2.8.8",
         "vite": "^4.3.9"
     }

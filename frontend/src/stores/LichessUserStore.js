@@ -39,12 +39,17 @@ export const LichessUserStore = defineStore("lichessUser", () => {
             method: "GET",
             mode: "cors",
             headers: {
-                "Access-Control-Allow-Origin": "http://localhost:8080/chess/",
+                // "Access-Control-Allow-Origin": "http://localhost:8080/chess/", // DEBUG
+                "Access-Control-Allow-Origin": "https://zti-backend-0ocf.onrender.com/chess",
             },
         };
 
         try {
-            await fetch(`http://localhost:8080/chess/player/${username}`, fetchSettings)
+            // await fetch(`http://localhost:8080/chess/player/${username}`, fetchSettings) // DEBUG
+            await fetch(
+                `https://zti-backend-0ocf.onrender.com/chess/player/${username}`,
+                fetchSettings
+            )
                 .then((response) => response.json())
                 .then((data) => {
                     basicInfo.id.value = data.id;
@@ -59,7 +64,11 @@ export const LichessUserStore = defineStore("lichessUser", () => {
         }
 
         try {
-            await fetch(`http://localhost:8080/chess/stats/${username}`, fetchSettings)
+            // await fetch(`http://localhost:8080/chess/stats/${username}`, fetchSettings) // DEBUG
+            await fetch(
+                `https://zti-backend-0ocf.onrender.com/chess/stats/${username}`,
+                fetchSettings
+            )
                 .then((response) => response.json())
                 .then((data) => {
                     statsInfo.all.value = data.all;
