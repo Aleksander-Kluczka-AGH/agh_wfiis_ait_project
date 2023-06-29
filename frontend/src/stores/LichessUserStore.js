@@ -41,6 +41,7 @@ export const LichessUserStore = defineStore("lichessUser", () => {
             headers: {
                 // "Access-Control-Allow-Origin": "http://localhost:8080/chess/", // DEBUG
                 "Access-Control-Allow-Origin": "https://zti-backend-0ocf.onrender.com/chess",
+                "Allow-Origin": "https://zti-backend-0ocf.onrender.com/chess",
             },
         };
 

@@ -13,7 +13,6 @@ import chariot.Client;
 import chariot.model.Many;
 import chariot.model.RatingHistory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import zti.lichess_stats.model.GameResult;
@@ -53,12 +52,9 @@ public class ChessGameResultController
                 .body("Player '" + username + "' does not exist");
         }
 
-        // if(metadataService.areStatsOutdated()) { }
-        // TODO: check if last cache date is older than 1 day
-
-
         List<GameResult> resultsFromDb = gameResultService.getGameResultsByPlayerId(username);
-        if(!resultsFromDb.isEmpty())
+
+        if(!metadataService.areGameResultsOutdated(username))
         {
             System.out.println("Returning from SQL database...");
             return ResponseEntity.status(HttpStatus.OK).body(resultsFromDb);

@@ -13,7 +13,6 @@ import chariot.Client;
 import chariot.model.StatsPerf.StatsPerfGame;
 import chariot.model.StatsPerfType;
 
-import zti.lichess_stats.model.Player;
 import zti.lichess_stats.model.Stats;
 import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
