@@ -8,6 +8,7 @@ services:
         ports:
             - "8080:8080"
     # TODO: backend should use 'expose' instead of 'ports' to make itself accessible to frontend
+    # (currently postponed, because Render hosting does not support docker compose)
     frontend:
         container_name: lichess_stats_frontend
         depends_on:

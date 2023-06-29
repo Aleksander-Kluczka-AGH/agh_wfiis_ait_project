@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import chariot.Client;
 
 import zti.lichess_stats.model.Player;
+import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
 
 @CrossOrigin(origins = {"http://localhost:5173/", "https://vis4rd.github.io/ait_project_2023/"},
@@ -24,11 +25,13 @@ public class ChessPlayerController
 {
     Client lichessClient = Client.basic();
     private final PlayerService playerService;
+    private final MetadataService metadataService;
 
     @Autowired
-    public ChessPlayerController(PlayerService playerService)
+    public ChessPlayerController(PlayerService playerService, MetadataService metadataService)
     {
         this.playerService = playerService;
+        this.metadataService = metadataService;
     }
 
     @GetMapping("/{playerId}")
@@ -41,8 +44,21 @@ public class ChessPlayerController
                 .body("Player '" + playerId + "' does not exist");
         }
 
-        // TODO: check if last cache date is older than 1 day
-        return ResponseEntity.status(HttpStatus.OK).body(playerService.getPlayerById(playerId));
+        var player = playerService.getPlayerById(playerId);
+        if(!metadataService.isPlayerOutdated(playerId))
+        {
+            System.out.println("Returning from SQL database...");
+            return ResponseEntity.status(HttpStatus.OK).body(player);
+        }
+
+        System.out.println("Returning from Lichess API...");
+        var lichessPlayer = lichessClient.users().byId(playerId).get();
+
+        player.setSeen(lichessPlayer.seenAt());
+        player.setTime_played(lichessPlayer.playTimeTotal().toString());
+        playerService.updatePlayer(player);
+
+        return ResponseEntity.status(HttpStatus.OK).body(player);
     }
 
     @PostMapping("/")

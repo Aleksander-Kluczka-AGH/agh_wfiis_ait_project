@@ -26,6 +26,8 @@ public class PlayerService
 
     public Player createPlayer(Player player) { return playerRepository.save(player); }
 
+    public Player updatePlayer(Player player) { return playerRepository.save(player); }
+
     public boolean doesPlayerExist(String playerId)
     {
         return playerRepository.existsById(playerId.toLowerCase());
