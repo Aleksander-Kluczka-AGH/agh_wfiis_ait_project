@@ -20,6 +20,9 @@ import zti.lichess_stats.service.GameResultService;
 import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @CrossOrigin(origins = {"http://localhost:5173/", "https://vis4rd.github.io/ait_project_2023/"},
     maxAge = 3_600)
 @RestController
@@ -30,6 +33,7 @@ public class ChessGameResultController
     private final GameResultService gameResultService;
     private final PlayerService playerService;
     private final MetadataService metadataService;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public ChessGameResultController(GameResultService gameResultService,
@@ -44,7 +48,7 @@ public class ChessGameResultController
     @GetMapping("/{username}")
     public ResponseEntity<?> getGameResultsByPlayerId(@PathVariable String username)
     {
-        System.out.println("/CHESS/GAME/" + username.toUpperCase());
+        log.info("/CHESS/GAME/" + username.toUpperCase());
 
         if(!playerService.ensurePlayerExists(username))
         {
@@ -56,7 +60,7 @@ public class ChessGameResultController
 
         if(!metadataService.areGameResultsOutdated(username))
         {
-            System.out.println("Returning from SQL database...");
+            log.info("Returning from SQL database...");
             return ResponseEntity.status(HttpStatus.OK).body(resultsFromDb);
         }
 
@@ -64,11 +68,11 @@ public class ChessGameResultController
         for(var ratingHistory : ratingHistories.stream().toList())
         {
             var formatName = ratingHistory.name().toLowerCase().replaceAll(" ", "");
-            System.out.println("Format = " + formatName);
+            log.info("Format = " + formatName);
             switch(formatName)
             {
-                case "puzzles": System.out.println("Skipping puzzles format..."); continue;
-                case "three-check": System.out.println("Skipping three-check format..."); continue;
+                case "puzzles": log.info("Skipping puzzles format..."); continue;
+                case "three-check": log.info("Skipping three-check format..."); continue;
 
                 default: break;
             }
@@ -79,13 +83,13 @@ public class ChessGameResultController
                        -> result.getDate().equals(gameResult.date())
                               && result.getPoints().equals(gameResult.points().longValue())))
                 {
-                    System.out.println("Skipping date = " + gameResult.date().toString()
-                                       + ", points = " + gameResult.points().longValue()
-                                       + " because it already exists in the database.");
+                    log.info("Skipping date = " + gameResult.date().toString()
+                             + ", points = " + gameResult.points().longValue()
+                             + " because it already exists in the database.");
                     continue;
                 }
-                System.out.print("points = " + gameResult.points() + ", ");
-                System.out.println("date = " + gameResult.date().toString());
+                log.info(
+                    "points = " + gameResult.points() + ", date = " + gameResult.date().toString());
                 gameResultService.createGameResultNative(gameResult.points().longValue(),
                     gameResult.date(),
                     username.toLowerCase(),
@@ -93,7 +97,7 @@ public class ChessGameResultController
             }
         }
 
-        System.out.println("Returning from Lichess API...");
+        log.info("Returning from Lichess API...");
         return ResponseEntity.status(HttpStatus.OK)
             .body(gameResultService.getGameResultsByPlayerId(username));
     }

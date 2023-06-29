@@ -17,6 +17,9 @@ import zti.lichess_stats.model.Player;
 import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @CrossOrigin(origins = {"http://localhost:5173/", "https://vis4rd.github.io/ait_project_2023/"},
     maxAge = 3_600)
 @RestController
@@ -26,6 +29,7 @@ public class ChessPlayerController
     Client lichessClient = Client.basic();
     private final PlayerService playerService;
     private final MetadataService metadataService;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public ChessPlayerController(PlayerService playerService, MetadataService metadataService)
@@ -37,7 +41,7 @@ public class ChessPlayerController
     @GetMapping("/{playerId}")
     public ResponseEntity<?> getPlayerById(@PathVariable String playerId)
     {
-        System.out.println("/CHESS/PLAYER/" + playerId.toUpperCase());
+        log.info("/CHESS/PLAYER/" + playerId.toUpperCase());
         if(!playerService.ensurePlayerExists(playerId))
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -47,11 +51,11 @@ public class ChessPlayerController
         var player = playerService.getPlayerById(playerId);
         if(!metadataService.isPlayerOutdated(playerId))
         {
-            System.out.println("Returning from SQL database...");
+            log.info("Returning from SQL database...");
             return ResponseEntity.status(HttpStatus.OK).body(player);
         }
 
-        System.out.println("Returning from Lichess API...");
+        log.info("Returning from Lichess API...");
         var lichessPlayer = lichessClient.users().byId(playerId).get();
 
         player.setSeen(lichessPlayer.seenAt());
@@ -64,7 +68,7 @@ public class ChessPlayerController
     @PostMapping("/")
     public ResponseEntity<?> createPlayer(@RequestBody Player player)
     {
-        System.out.println("POST:: /CHESS/PLAYER/");
+        log.info("POST:: /CHESS/PLAYER/");
         playerService.createPlayer(player);
         return ResponseEntity.status(HttpStatus.CREATED).body("Player created successfully!");
     }

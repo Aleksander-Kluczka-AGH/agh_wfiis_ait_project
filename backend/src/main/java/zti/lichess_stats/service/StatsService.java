@@ -9,12 +9,15 @@ import zti.lichess_stats.model.Stats;
 import zti.lichess_stats.repository.StatsRepository;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class StatsService
 {
     @Autowired
     private StatsRepository statsRepository;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public Stats getStatsByPlayerId(String playerId)
     {
@@ -80,11 +83,11 @@ public class StatsService
         }
         catch(ConstraintViolationException e)
         {
-            System.out.println("TABLE CONSTRAINT ERROR: " + e);
+            log.info("TABLE CONSTRAINT ERROR: " + e);
         }
         catch(Exception e)
         {
-            System.out.println("UNKNOWN ERROR: " + e);
+            log.info("UNKNOWN ERROR: " + e);
         }
         return this.getStatsByPlayerId(id);
     }

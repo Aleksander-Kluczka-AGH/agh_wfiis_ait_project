@@ -18,6 +18,9 @@ import zti.lichess_stats.service.MetadataService;
 import zti.lichess_stats.service.PlayerService;
 import zti.lichess_stats.service.StatsService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @CrossOrigin(origins = {"http://localhost:5173/", "https://vis4rd.github.io/ait_project_2023/"},
     maxAge = 3_600)
 @RestController
@@ -28,6 +31,7 @@ public class StatsController
     private final StatsService statsService;
     private final PlayerService playerService;
     private final MetadataService metadataService;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public StatsController(StatsService statsService,
@@ -42,7 +46,7 @@ public class StatsController
     @GetMapping("/{username}")
     public ResponseEntity<?> getStatsByPlayerId(@PathVariable String username)
     {
-        System.out.println("/CHESS/STATS/" + username.toUpperCase());
+        log.info("/CHESS/STATS/" + username.toUpperCase());
         if(!playerService.ensurePlayerExists(username))
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -53,13 +57,13 @@ public class StatsController
         {
             if(!metadataService.areStatsOutdated(username))
             {
-                System.out.println("Returning from SQL database...");
+                log.info("Returning from SQL database...");
                 return ResponseEntity.status(HttpStatus.OK)
                     .body(statsService.getStatsByPlayerId(username));
             }
             else
             {
-                System.out.println("Stats cache is too old, deleting existing entry...");
+                log.info("Stats cache is too old, deleting existing entry...");
                 statsService.deleteStatsByPlayerId(username);
             }
         }
@@ -88,7 +92,7 @@ public class StatsController
         var correspondenceRating =
             correspondenceStats != null ? Long.valueOf(correspondenceStats.rating()) : 0L;
 
-        System.out.println("Returning from Lichess API...");
+        log.info("Returning from Lichess API...");
         Stats newStats = statsService.createStatsNative(username,
             Long.valueOf(lichessStats1.all()),
             Long.valueOf(lichessStats1.rated()),
