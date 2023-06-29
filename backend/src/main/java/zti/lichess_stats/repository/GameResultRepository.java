@@ -17,6 +17,15 @@ import org.hibernate.exception.ConstraintViolationException;
 public interface GameResultRepository extends JpaRepository<GameResult, Long> {
     List<GameResult> findAllByPlayerId(String playerId);
 
+    /**
+     * Saves a game result to the database. This method does not require to obtain GameResult object
+     * in order to insert it into the database.
+     * @param points Rating status after the game has finished.
+     * @param date Date when the game was played.
+     * @param playerId Unique player ID from Lichess account.
+     * @param format Format of the game (e.g. "blitz", "rapid", "bullet").
+     * @throws ConstraintViolationException Thrown when given player does not exist in the database.
+     */
     @Transactional
     @Modifying
     @Query(

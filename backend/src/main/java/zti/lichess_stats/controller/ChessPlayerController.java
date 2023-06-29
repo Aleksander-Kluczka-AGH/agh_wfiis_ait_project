@@ -31,6 +31,11 @@ public class ChessPlayerController
     private final MetadataService metadataService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Constructor for ChessPlayerController.
+     * @param playerService Service used to interact with the Player repository.
+     * @param metadataService Service used to interact with the Metadata repository.
+     */
     @Autowired
     public ChessPlayerController(PlayerService playerService, MetadataService metadataService)
     {
@@ -38,6 +43,11 @@ public class ChessPlayerController
         this.metadataService = metadataService;
     }
 
+    /**
+     * Returns a player either from database cache or Lichess API.
+     * @param playerId Unique player ID from Lichess account.
+     * @return Player object.
+     */
     @GetMapping("/{playerId}")
     public ResponseEntity<?> getPlayerById(@PathVariable String playerId)
     {
@@ -65,6 +75,11 @@ public class ChessPlayerController
         return ResponseEntity.status(HttpStatus.OK).body(player);
     }
 
+    /**
+     * Creates a new player in the database.
+     * @param player Player object.
+     * @return Response informing about creation result.
+     */
     @PostMapping("/")
     public ResponseEntity<?> createPlayer(@RequestBody Player player)
     {

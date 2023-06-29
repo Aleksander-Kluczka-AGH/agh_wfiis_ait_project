@@ -33,6 +33,12 @@ public class StatsController
     private final MetadataService metadataService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Constructor for StatsController.
+     * @param statsService Service used to interact with the Stats repository.
+     * @param playerService Service used to interact with the Player repository.
+     * @param metadataService Service used to interact with the Metadata repository.
+     */
     @Autowired
     public StatsController(StatsService statsService,
         PlayerService playerService,
@@ -43,6 +49,11 @@ public class StatsController
         this.metadataService = metadataService;
     }
 
+    /**
+     * Returns all statistics for a given player (either from database cache or from Lichess API).
+     * @param username Unique player ID from Lichess account.
+     * @return Statistics of given player.
+     */
     @GetMapping("/{username}")
     public ResponseEntity<?> getStatsByPlayerId(@PathVariable String username)
     {

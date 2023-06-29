@@ -35,6 +35,12 @@ public class ChessGameResultController
     private final MetadataService metadataService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Constructor for ChessGameResultController.
+     * @param gameResultService Service used to interact with the GameResult repository.
+     * @param playerService Service used to interact with the Player repository.
+     * @param metadataService Service used to interact with the Metadata repository.
+     */
     @Autowired
     public ChessGameResultController(GameResultService gameResultService,
         PlayerService playerService,
@@ -45,6 +51,11 @@ public class ChessGameResultController
         this.metadataService = metadataService;
     }
 
+    /**
+     * Returns all game results for a given player.
+     * @param username Unique player ID from Lichess account.
+     * @return List of GameResult objects.
+     */
     @GetMapping("/{username}")
     public ResponseEntity<?> getGameResultsByPlayerId(@PathVariable String username)
     {

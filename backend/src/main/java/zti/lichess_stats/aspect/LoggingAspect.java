@@ -16,18 +16,31 @@ public class LoggingAspect
 {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Pointcut that matches all methods found in controllers.
+     */
     @Pointcut("execution(* zti.lichess_stats.controller.*.*(..))")
     public void controllerMethods()
     { }
 
+    /**
+     * Pointcut that matches all methods found in services.
+     */
     @Pointcut("execution(* zti.lichess_stats.service.*.*(..))")
     public void serviceMethods()
     { }
 
+    /**
+     * Pointcut that matches all methods found in repositories.
+     */
     @Pointcut("execution(* zti.lichess_stats.repository.*.*(..))")
     public void repositoryMethods()
     { }
 
+    /**
+     * Logs before entering any controller method.
+     * @param joinPoint JoinPoint used to intercept the method call.
+     */
     @Before("controllerMethods()")
     public void logBeforeControllers(JoinPoint joinPoint)
     {
@@ -35,6 +48,10 @@ public class LoggingAspect
                  + "." + joinPoint.getSignature().getName() + "()");
     }
 
+    /**
+     * Logs before entering any repository method.
+     * @param joinPoint JoinPoint used to intercept the method call.
+     */
     @Before("serviceMethods()")
     public void logBeforeServices(JoinPoint joinPoint)
     {
@@ -42,6 +59,11 @@ public class LoggingAspect
                  + joinPoint.getSignature().getName() + "()");
     }
 
+    /**
+     * Logs after throwing an exception in any controller, service or repository method.
+     * @param joinPoint JoinPoint used to intercept the method call.
+     * @param e Exception thrown.
+     */
     @AfterThrowing(pointcut = "controllerMethods() || serviceMethods() || repositoryMethods()",
         throwing = "e")
     public void
