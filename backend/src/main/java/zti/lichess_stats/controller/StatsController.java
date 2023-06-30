@@ -21,8 +21,7 @@ import zti.lichess_stats.service.StatsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@CrossOrigin(origins = {"http://localhost:5173", "https://vis4rd.github.io/ait_project_2023"},
-    maxAge = 3_600)
+@CrossOrigin(origins = "*", maxAge = 3_600)
 @RestController
 @RequestMapping("/chess/stats")
 public class StatsController
