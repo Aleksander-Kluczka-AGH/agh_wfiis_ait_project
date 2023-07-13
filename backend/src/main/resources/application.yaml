@@ -5,7 +5,9 @@ spring:
         password: tK-S3zbTefc1JF9dRFuRPzFUUJel_jse
         driver-class-name: org.postgresql.Driver
         platform: postgres
+        min-idle: 0
         max-idle: 0
+        max-active: 1
     jpa:
         database: POSTGRESQL
         database-platform: org.hibernate.dialect.PostgreSQLDialect
