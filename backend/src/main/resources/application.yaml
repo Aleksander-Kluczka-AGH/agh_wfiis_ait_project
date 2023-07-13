@@ -4,6 +4,11 @@ spring:
         username: sejhfrus
         password: tK-S3zbTefc1JF9dRFuRPzFUUJel_jse
         driver-class-name: org.postgresql.Driver
+        platform: postgres
+        max-idle: 0
+    jpa:
+        database: POSTGRESQL
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
 logging:
     level:
         org.springframework.web: INFO
